@@ -17,7 +17,7 @@ type: page
 
 ## 联系我
 
-* GitHub：[kuru2010](https://github.com/kuru2010
+* GitHub：[kuru2010](https://github.com/kuru2010)
 * email：shkkk_2004@qq.com
 
 ## 关于本站
