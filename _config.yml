@@ -6,8 +6,8 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: YHHuang
-brief-intro: Product Engineer
+title: Yonghou Huang's profession blog
+brief-intro: Product Pilot
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://kuru2010.github.io" # the base hostname & protocol for your site
 
@@ -23,7 +23,7 @@ zhihu_username:
 linkedIn_username: 
 dribbble_username:
 
-description_footer: 在路上的风景！
+description_footer: Never complain your fate! Never lost your courage！
 
 # comments
 # two ways to comment, only choose one, and use your own short name
