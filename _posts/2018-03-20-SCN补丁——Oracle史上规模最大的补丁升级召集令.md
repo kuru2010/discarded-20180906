@@ -1,13 +1,13 @@
+---
 layout: post
 title:  "SCN的时空陷阱——Oracle史上规模最大的补丁升级召集令"
 date:   2018-03-20 10:15:18 +0800
 categories: Oracle
-tags: SCN patches
+tags: SCN Oracle
 author: 枯荣长老
+---
 
 SCN的时空陷阱——Oracle史上规模最大的补丁升级召集令
-
-
 
 Oracle最近发布了：
 
@@ -46,20 +46,17 @@ Oracle Database versions 11.1.0.7, 11.2.0.3 & 12.1.0.1 are strongly recommended 
 
 **说明：稍后会单独提供Oracle 10.2.0.5所需补丁。——我们没有遗忘Oracle 10.2.0.5**
 
-
 1. What are the recommended patchset/PSU/BP/RU levels ?
 
 For database versions 11.1.0.7, 11.2.0.3 & 12.1.0.1, ensure that all interconnected databases are in the below mentioned patchset/ PSU/BP levels or above:
 
-
 In summary, 12.2.0.1 and higher releases, 11.2.0.4 and 12.1.0.2 patchsets have this fix included, while patches are available for 11.1.0.7 and 11.2.0.3 releases. If you have any other database server installations (e.g. 10.2.0.5, 11.2.0.2), you should be aware about potential dblink issues in future and consider applying the required patches or upgrading the databases, or not using dblinks with newer versions of databases.
 
-
-2. What is the timeline for moving to the recommended patchset/PSU/BP mentioned ?
+1. What is the timeline for moving to the recommended patchset/PSU/BP mentioned ?
 
 All databases are recommended to be at the above-mentioned release/patchset/ PSU/BP levels (or above) before June 2019.
 
-3. What is the change introduced by the patches listed above?
+1. What is the change introduced by the patches listed above?
 
 These patches increase the database's current maximum SCN (system change number) limit.
 
@@ -73,7 +70,7 @@ These recommended patches enable the databases to allow for a higher current max
 1. **当前SCN限制阈值。当前SCN限制阈值是根据1988以来的秒数与16384的乘积来计算所得，如果数据库事务非常多且极为频繁、或者出现bug时，可能会导致SCN在某一时刻逐渐逼近该时刻的SCN限制阈值，造成数据库无法正常工作。**
 
 
-2. **根据调整后的最大SCN限制，提供更高的SCN增长速率，以支持更多的并发事务数。**
+1. **根据调整后的最大SCN限制，提供更高的SCN增长速率，以支持更多的并发事务数。**
 
 Please note that the patches only increase the max limit but the current SCN is not impacted. So, if all your databases don’t have any major change in transaction rate, the current SCN would still remain below the current maximum SCN limit and database links between newer (or patched) and unpatched databases would continue to work. The patches provide the safety measure to ensure that you don’t have any issue with dblinks independent of any possible future change in your transaction rate.
 
@@ -87,8 +84,7 @@ With the patches applied, this change in current maximum SCN limit will happen a
 
    **补丁修正后，当前SCN最大限制阈值调整自动于2019年6月23日生效。**
 
-
-4. What happens if the recommended PSU / patchset is not applied?
+1. What happens if the recommended PSU / patchset is not applied?
 
 If this patch is not applied, the unpatched database will have a lower SCN rate or lower current max SCN limit.
 
@@ -106,15 +102,13 @@ This situation will not rise immediately after the change, but can potentially a
 
    **介于新SCN机制的数据库与老SCN机制的数据库之间的dblink访问，根据dblink机制，会在访问时，同步两个数据库的SCN，以保证数据访问的一致性。这样有可能造成老SCN机制的数据库出现SCN headroom问题，从而导致dblink连接访问被拒绝。这种情况在2019年6月23日以后会更为明显。**
 
-
-5. What about databases that are 10.2 or older, which are not listed in the table?
+1. What about databases that are 10.2 or older, which are not listed in the table?
 
 You should be aware about potential dblink issues in future and consider about upgrading the databases or not using dblinks with newer versions of databases . If you continue to have such database links after June 2019, you may get run-time errors during database link operations (as explained above) and you would need to disconnect those database links at that time.
 
 (Based on customer feedback, we are currently evaluating the need and feasibility of providing a patch for 10.2.0.5 and this note will be updated with that information at a later time.)
 
-
-6. How can I check the details regarding the dblinks to and from a database?
+1. How can I check the details regarding the dblinks to and from a database?
 
 In order to identify database links, please review "Viewing Information About database Links" in Database Administrator's guide.
 Please note that outgoing db links from a database can be identified via DBA_DB_LINKS view for all database releases.
@@ -123,8 +117,7 @@ select * from dba_db_links;
 For 12.1 and later releases, you can also find out about incoming database links via DBA_DB_LINK_SOURCES view.
 select * from dba_db_link_sources;
 
-
-7. Will there be any issues with the db links connecting two unpatched databases ? Or databases of older versions?
+1. Will there be any issues with the db links connecting two unpatched databases ? Or databases of older versions?
 
 The dblink connections involving two unpatched databases or two older releases are not affected by this change.
 
@@ -134,8 +127,7 @@ The dblink connections involving two unpatched databases or two older releases a
 
    **例如两个10.2.0.5数据库，均未修复过该补丁，则这两个数据库之间的dblink访问不受影响**
 
-
-8. Will the dblinks involving a patched and an unpatched database, stop working immediately after June 2019? 
+1. Will the dblinks involving a patched and an unpatched database, stop working immediately after June 2019? 
 
 DB Links will not become unusable immediately after June 2019. However, might encounter errors in situations explained in question 4, at any point in time after June 2019.
 
@@ -143,8 +135,7 @@ DB Links will not become unusable immediately after June 2019. However, might en
 
    **在已修正的数据库和未修正的数据库之间的dblink访问不会在2019年6月之后立刻出现无法使用的情况，具体可参见第4点。**
 
-
-9. What should I do, if the dblink connection from an older version database to a latest (or patched) version database fails, after June 2019?
+1. What should I do, if the dblink connection from an older version database to a latest (or patched) version database fails, after June 2019?
 
 Patch or upgrade the older version database to any patch level mentioned in the table.
 
@@ -152,11 +143,11 @@ Patch or upgrade the older version database to any patch level mentioned in the 
 
    **如果2019年6月以后出现dblink连接因SCN问题导致被拒的情况，可将老版本数据库升级或者安装修正补丁（如果有的话）。**
 
-
-10. What do we need to do for 11.2.0.4, 12.1.0.2 and 12.2.0.1 database releases?
+1. What do we need to do for 11.2.0.4, 12.1.0.2 and 12.2.0.1 database releases?
 
 No action is necessary. All the fixes needed are already included in these releases.
-11. Support and Questions
+
+1. Support and Questions
 
  If you have any queries please post them in the Database community page: https://community.oracle.com/message/14710245#14710245
 
@@ -174,4 +165,7 @@ No action is necessary. All the fixes needed are already included in these relea
 参考文档：
 
 System Change Number (SCN), Headroom, Security and Patch Information (Doc ID 1376995.1)
+
+
+
 
